@@ -1,0 +1,29 @@
+# {{ title }}
+
+{% if meta_line %}
+> {{ meta_line }}
+
+{% endif %}
+本期从原文中挑出 {{ claims|length }} 条可解读的条款。每条结论下面都附了对应条款的原文引文，可以逐字对照；引文与原文对不上的条目不会被导出。
+
+## 先看结论
+
+{% for item in highlights %}
+> **{{ item.label }}｜{{ item.conclusion }}**
+>
+> 原文：“{{ item.quote }}”
+
+{% endfor %}
+{% for item in claims %}
+## {{ item.label }}
+
+{{ item.conclusion }}
+
+> 原文：“{{ item.quote }}”
+
+出处：{{ item.label }}{% if item.page_text %}（{{ item.page_text }}）{% endif %}{% if item.effective_date %}，自 {{ item.effective_date }} 起施行{% endif %}。
+
+{% endfor %}
+---
+
+本文依据{{ doc_reference }}整理，只做条文摘录与解读，不构成法律意见；引用请以原文为准。

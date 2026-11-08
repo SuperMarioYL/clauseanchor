@@ -1,0 +1,20 @@
+【口播稿】{{ title }}
+
+（开场）
+今天用几分钟，把这份文件里跟我们有关的重点过一遍，一共 {{ claims|length }} 条。每条先说结论，再念原文，你可以直接对照。
+
+{% for item in claims %}
+（第 {{ loop.index }} 段 · {{ item.label }}）
+{{ item.label }}，一句话说，{{ item.conclusion }}
+原文是这么写的：“{{ item.quote }}”
+{% if item.effective_date %}
+这一条从 {{ item.effective_date }} 起施行。
+
+{% endif %}
+{% endfor %}
+（收尾）
+以上几条都出自{{ doc_reference }}{% if effective_date %}，{{ effective_date }} 起施行{% endif %}。具体怎么适用要结合你的实际情况，引用请以原文为准。
+
+（录制提示）
+- 每条之间停半秒，念到“第X条”时放慢一点。
+- 引文部分是原话，不要临场改写。

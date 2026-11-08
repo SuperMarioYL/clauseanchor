@@ -1,0 +1,71 @@
+name: release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build dist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Check the tag matches VERSION
+        run: |
+          version="$(cat VERSION)"
+          test "v${version}" = "${GITHUB_REF_NAME}" || {
+            echo "tag ${GITHUB_REF_NAME} does not match VERSION ${version}"
+            exit 1
+          }
+
+      - name: Build wheel and sdist
+        run: uv build
+
+      - name: Write checksums
+        run: |
+          cd dist
+          sha256sum clauseanchor-* > checksums.txt
+          cat checksums.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clauseanchor-dist
+          # Only real distributions: gh-action-pypi-publish runs
+          # `twine check dist/*`, and checksums.txt is not a distribution.
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clauseanchor-checksums
+          path: dist/checksums.txt
+          if-no-files-found: error
+
+  pypi:
+    # Opt-in: set the PYPI_PUBLISH repository variable and register the Trusted
+    # Publisher first. Unset (the default) skips the job so the first release
+    # stays green.
+    name: publish to PyPI
+    if: startsWith(github.ref, 'refs/tags/v') && vars.PYPI_PUBLISH == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: clauseanchor-dist
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

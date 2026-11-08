@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}｜条款图卡</title>
+<style>
+  :root {
+    --ink: #1f2328;
+    --muted: #6b7280;
+    --line: #d8dee6;
+    --accent: #b42318;
+    --paper: #fbfaf7;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 24px 64px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", serif;
+  }
+  .deck-head, .cards, .deck-foot {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .deck-head { padding-bottom: 28px; border-bottom: 2px solid var(--ink); }
+  .kicker {
+    margin: 0 0 12px;
+    font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+    font-size: 13px;
+    letter-spacing: .32em;
+    color: var(--accent);
+  }
+  .deck-head h1 { margin: 0; font-size: 34px; line-height: 1.35; font-weight: 700; }
+  .meta { margin: 12px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 28px;
+    padding: 36px 0 8px;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 32px 34px 26px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--accent);
+    box-shadow: 0 12px 32px rgba(31, 35, 40, .06);
+  }
+  .card-label {
+    margin: 0 0 18px;
+    font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--accent);
+  }
+  .card h2 { margin: 0 0 22px; font-size: 26px; line-height: 1.5; font-weight: 700; }
+  .card blockquote {
+    margin: 0 0 24px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--line);
+    background: #f6f7f9;
+    color: #33383f;
+    font-size: 17px;
+    line-height: 1.85;
+  }
+  .card blockquote::before { content: "原文　"; color: var(--muted); font-size: 13px; }
+  .card footer {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    font-family: "Noto Sans SC", "PingFang SC", sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .deck-foot {
+    margin-top: 32px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  @media print {
+    body { background: #ffffff; padding: 0; }
+    .cards { grid-template-columns: 1fr; gap: 0; }
+    .card { min-height: 0; box-shadow: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<header class="deck-head">
+  <p class="kicker">条款图卡</p>
+  <h1>{{ title }}</h1>
+  {% if meta_line %}<p class="meta">{{ meta_line }}</p>{% endif %}
+</header>
+
+<main class="cards">
+  {% for item in claims %}
+  <article class="card">
+    <p class="card-label">{{ item.label }}</p>
+    <h2>{{ item.conclusion }}</h2>
+    <blockquote>{{ item.quote }}</blockquote>
+    <footer>
+      {% if item.page_text %}<span>{{ item.page_text }}</span>{% endif %}
+      {% if item.effective_date %}<span>自 {{ item.effective_date }} 起施行</span>{% endif %}
+      {% if doc_number %}<span>{{ doc_number }}</span>{% endif %}
+    </footer>
+  </article>
+  {% endfor %}
+</main>
+
+<footer class="deck-foot">
+  只做条文摘录与解读，不构成法律意见；引用请以原文为准。
+</footer>
+</body>
+</html>

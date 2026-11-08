@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+      - name: Install
+        run: uv sync
+      - name: Compile
+        run: uv run python -m compileall -q src
+      - name: Parse the bundled sample
+        run: uv run clauseanchor parse examples/sample_gongbao.txt --json > /dev/null
+      - name: Parse the multi-page PDF fixture
+        run: |
+          uv run clauseanchor parse tests/fixtures/multipage_gongbao.pdf --json > /tmp/clauseanchor-fixture.json
+          uv run python - <<'PY'
+          import json
+
+          data = json.load(open("/tmp/clauseanchor-fixture.json", encoding="utf-8"))
+          assert data["article_count"] == 5, data["article_count"]
+          assert [c["page"] for c in data["clauses"]] == [1, 1, 2, 2, 3]
+          assert all("示例省人民政府公报" not in c["text"] for c in data["clauses"])
+          assert all("第 " not in c["text"] for c in data["clauses"])
+          PY
+      - name: Tests
+        run: |
+          if compgen -G "tests/test_*.py" > /dev/null; then
+            uv run pytest -q
+          else
+            echo "no test suite yet"
+          fi

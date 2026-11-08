@@ -1,0 +1,78 @@
+{
+  "schema": "clauseanchor.demo-results",
+  "version": "0.1.0",
+  "recorded_at": "2026-11-09",
+  "environment": {
+    "python": "3.13 (uv-managed)",
+    "dependencies": [
+      "pymupdf 1.28",
+      "httpx 0.28",
+      "jinja2 3.1",
+      "pytest 8"
+    ],
+    "network": "none for parse, demo and tests; draft needs an OpenAI-compatible endpoint"
+  },
+  "steps": [
+    {
+      "command": "uv run clauseanchor demo",
+      "input": "examples/sample_gongbao.txt",
+      "output": "识别 12 条 · 6 款 · 生效日期 2026-09-01\n模型自报生效日期 2027-01-01；成品使用解析结果 2026-09-01\n采纳 2 条：c1 第一条、c2 第五条\n拦下 2 条：c3 第九条、c4 第五条"
+    },
+    {
+      "command": "uv run clauseanchor parse examples/real/sh_gov_investment_management.pdf",
+      "input": "examples/real/sh_gov_investment_management.pdf",
+      "output": "examples/real/sh_gov_investment_management.pdf  (pdf · 8 页)\n上海市人民政府关于印发《上海市市级政府投资管理办法》的通知\n发文机关  上海市人民政府\n发文字号  沪府规〔2026〕5号\n生效日期  2026-08-01\n条款      37 条 · 0 款"
+    },
+    {
+      "command": "uv run clauseanchor demo --file examples/real/sh_gov_investment_management.pdf -o /tmp/clauseanchor-demo-real",
+      "input": "examples/real/sh_gov_investment_management.pdf",
+      "output": "识别 37 条 · 0 款 · 生效日期 2026-08-01\n模型自报生效日期 2027-01-01；成品使用解析结果 2026-08-01\n采纳 2 条：c1 第一条、c2 第十三条\n拦下 2 条：c3 第二十五条、c4 第十三条"
+    },
+    {
+      "command": "uv run pytest -q",
+      "input": "tests/",
+      "output": "43 passed"
+    },
+    {
+      "command": "uv run python assets/demo/make_clause_diff.py",
+      "input": "examples/real/sh_gov_investment_management.pdf",
+      "output": "assets/demo/clause-diff.gif\naccepted 2 · rejected 2 · source sh_gov_investment_management.pdf"
+    }
+  ],
+  "demo_run": {
+    "source": "examples/real/sh_gov_investment_management.pdf",
+    "page_count": 8,
+    "article_count": 37,
+    "issuer": "上海市人民政府",
+    "doc_number": "沪府规〔2026〕5号",
+    "effective_date": "2026-08-01",
+    "candidates": 4,
+    "accepted": 2,
+    "rejected": 2,
+    "rejected_reasons": {
+      "c3": "第二十五条：引文被插入其他文字，不再是原文的逐字子串",
+      "c4": "第十三条：引文来自第二十五条，条款号与原文不符"
+    },
+    "outputs": [
+      "out/长文.md",
+      "out/koubo.md",
+      "out/cards.html",
+      "out/decisions.json",
+      "out/demo-raw-model-draft.md"
+    ]
+  },
+  "assets": {
+    "demo_gif": "assets/demo/clause-diff.gif",
+    "generator": "assets/demo/make_clause_diff.py",
+    "requires": [
+      "pymupdf",
+      "ffmpeg"
+    ]
+  },
+  "limitations": [
+    "Text-layer PDFs and plain text only; scanned gazettes and OCR are out of scope for v0.1.",
+    "第X条 / 第X款 grammar is a fixed pattern; per-agency layout differences may need manual review before drafting.",
+    "Attachment tables, revision comparison and legal conclusions are not implemented.",
+    "The demo substitutes a fixed candidate set for the model and a fixed accept/reject rule for the author; it never calls a network endpoint."
+  ]
+}
