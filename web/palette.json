@@ -1,0 +1,38 @@
+{
+  "mode": "auto",
+  "id": "e66056-e7b56a-f6acc2-681201725634",
+  "identity": "https://github.com/supermarioyl/clauseanchor",
+  "primary": "#e66056",
+  "secondary": "#e7b56a",
+  "highlight": "#f6acc2",
+  "dark": {
+    "bg": "#0a070d",
+    "panel": "#131017",
+    "code": "#140d13",
+    "ink": "#fdeef3",
+    "muted": "#b29ea8",
+    "line": "#3a1b1d",
+    "primary": "#e66056",
+    "secondary": "#e7b56a",
+    "highlight": "#f6acc2",
+    "accent": "#e66056",
+    "buttonStart": "#c45249",
+    "buttonEnd": "#917142",
+    "buttonText": "#ffffff"
+  },
+  "light": {
+    "bg": "#fef9f9",
+    "panel": "#fef7f7",
+    "code": "#fdf4f3",
+    "ink": "#27171c",
+    "muted": "#72606b",
+    "line": "#f7cecb",
+    "primary": "#bb4e46",
+    "secondary": "#8a6c40",
+    "highlight": "#916572",
+    "accent": "#bb4e46",
+    "buttonStart": "#c45249",
+    "buttonEnd": "#917142",
+    "buttonText": "#ffffff"
+  }
+}

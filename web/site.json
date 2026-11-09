@@ -1,0 +1,350 @@
+{
+  "schema": 3,
+  "name": "ClauseAnchor",
+  "github": "https://github.com/SuperMarioYL/clauseanchor",
+  "palette": "auto",
+  "lang": {
+    "primary": "zh",
+    "toggle": true
+  },
+  "hero": {
+    "eyebrow": {
+      "zh": "条款锚点 · 逐条取舍",
+      "en": "Clause anchoring · per-claim review"
+    },
+    "headline": {
+      "zh": "公报进，条款锚定的\n公众号解读稿出。",
+      "en": "Gazette in,\nclause-anchored draft out."
+    },
+    "sub": {
+      "zh": "把政策公报拆成第 X 条与第 X 款，模型只出候选，你逐条 a / e / r。引文必须逐字命中所属条款，结论里的每个条款号也必须已校验，否则导不出。",
+      "en": "Parse a policy gazette into 第X条 / 第X款 units. The model only proposes; you accept, rewrite or reject each claim. A quote must match its clause verbatim and every clause number in the prose must verify, or the export fails."
+    },
+    "href": "#quickstart",
+    "cta": {
+      "zh": "开始使用",
+      "en": "Get started"
+    },
+    "ctaGithub": {
+      "zh": "在 GitHub 查看",
+      "en": "View on GitHub"
+    }
+  },
+  "advantages": [
+    {
+      "title": {
+        "zh": "引文必须逐字命中",
+        "en": "Quotes must match verbatim"
+      },
+      "body": {
+        "zh": "去空白、统一全角半角（NFKC）后，引文必须是所属条款原文的精确子串。它只和这条结论声明的条款比对：原文真在别条，也不会被自动改挂过去。",
+        "en": "After whitespace removal and NFKC normalization, a quote must be an exact substring of the clause it asserts. It is checked only against the clauses that the claim named; a passage that really lives elsewhere fails instead of being silently re-pointed."
+      },
+      "chips": [
+        "NFKC",
+        "substring"
+      ]
+    },
+    {
+      "title": {
+        "zh": "结论里的条款号也要校验",
+        "en": "Clause numbers in the prose are checked too"
+      },
+      "body": {
+        "zh": "结论正文里点名的每个 第X条 / 第X条Y款 都必须是该条已校验、且在文档中存在的条款路径之一。写出没校验过的 第九十九条 会被拦下，即使引文是真的。",
+        "en": "Every 第X条 / 第X条Y款 named in the conclusion must be one of that claim's verified clauses and must exist in the document. A fabricated 第九十九条 is blocked even when the quote itself is real."
+      },
+      "chips": [
+        "第X条Y款",
+        "clause_ids"
+      ]
+    },
+    {
+      "title": {
+        "zh": "决定文件绑回源文件",
+        "en": "The decision file is bound to the source"
+      },
+      "body": {
+        "zh": "decisions.json 记录源文件 doc_id 与每条条款快照的正文摘要。render 与重放都会重新解析源文件：摘要对不上时，render 拒绝导出，重放直接失败；改快照不能伪造引文。它不含 API key，也不含整份原文。",
+        "en": "decisions.json stores the source doc_id and a text digest for every clause snapshot. Render and replay both re-parse the source: on a mismatch, render refuses to export and replay fails outright, so editing a snapshot cannot manufacture a quote. The file contains no API key and no full document."
+      },
+      "chips": [
+        "doc_id",
+        "digest"
+      ]
+    }
+  ],
+  "demo": {
+    "title": {
+      "zh": "记录下来的运行",
+      "en": "Recorded runs"
+    },
+    "note": {
+      "zh": "下面的命令与输出逐字复制自 docs/demo-results.json 的实际记录。页面只呈现记录，不在浏览器里执行产品。",
+      "en": "The commands and output below are copied verbatim from the recorded run in docs/demo-results.json. This page presents the record; it does not execute the product in the browser."
+    },
+    "source": "https://github.com/SuperMarioYL/clauseanchor/blob/main/docs/demo-results.json",
+    "steps": [
+      {
+        "label": {
+          "zh": "解析真实公报",
+          "en": "Parse the real gazette"
+        },
+        "body": {
+          "zh": "8 页、37 条、0 款；发文字号与生效日期都来自解析结果。",
+          "en": "8 pages, 37 articles, 0 paragraphs; the document number and effective date come from parsing."
+        },
+        "image": "/assets/demo-parse-light.svg",
+        "imageDark": "/assets/demo-parse-dark.svg",
+        "command": "uv run clauseanchor parse examples/real/sh_gov_investment_management.pdf",
+        "output": "examples/real/sh_gov_investment_management.pdf  (pdf · 8 页)\n上海市人民政府关于印发《上海市市级政府投资管理办法》的通知\n发文机关  上海市人民政府\n发文字号  沪府规〔2026〕5号\n生效日期  2026-08-01\n条款      37 条 · 0 款"
+      },
+      {
+        "label": {
+          "zh": "真实公报上的完整流程",
+          "en": "Full run on the real gazette"
+        },
+        "body": {
+          "zh": "4 条候选：采纳 2 条、拦下 2 条。c3 的引文被插入其他文字；c4 把第二十五条的原文挂到第十三条。",
+          "en": "Four candidates: 2 accepted, 2 blocked. c3 has other text inserted into its quote; c4 files the 第二十五条 passage under 第十三条."
+        },
+        "image": "/assets/demo-review-light.svg",
+        "imageDark": "/assets/demo-review-dark.svg",
+        "command": "uv run clauseanchor demo --file examples/real/sh_gov_investment_management.pdf -o /tmp/clauseanchor-demo-real",
+        "output": "识别 37 条 · 0 款 · 生效日期 2026-08-01\n模型自报生效日期 2027-01-01；成品使用解析结果 2026-08-01\n采纳 2 条：c1 第一条、c2 第十三条\n拦下 2 条：c3 第二十五条、c4 第十三条"
+      },
+      {
+        "label": {
+          "zh": "内置离线样例",
+          "en": "Bundled offline sample"
+        },
+        "body": {
+          "zh": "内置样例识别 12 条、6 款；模型自报 2027-01-01，成品改用解析结果 2026-09-01。",
+          "en": "The bundled sample parses to 12 articles and 6 paragraphs; the model claims 2027-01-01, while the pack uses the parsed 2026-09-01."
+        },
+        "image": "/assets/demo-sample-light.svg",
+        "imageDark": "/assets/demo-sample-dark.svg",
+        "command": "uv run clauseanchor demo",
+        "output": "识别 12 条 · 6 款 · 生效日期 2026-09-01\n模型自报生效日期 2027-01-01；成品使用解析结果 2026-09-01\n采纳 2 条：c1 第一条、c2 第五条\n拦下 2 条：c3 第九条、c4 第五条"
+      },
+      {
+        "label": {
+          "zh": "测试",
+          "en": "Tests"
+        },
+        "body": {
+          "zh": "记录中的测试套件结果为 43 项通过。",
+          "en": "The recorded test suite result is 43 passing tests."
+        },
+        "image": "/assets/demo-tests-light.svg",
+        "imageDark": "/assets/demo-tests-dark.svg",
+        "command": "uv run pytest -q",
+        "output": "43 passed"
+      }
+    ]
+  },
+  "quickstart": {
+    "title": {
+      "zh": "十分钟上手",
+      "en": "Ten-minute start"
+    },
+    "body": {
+      "zh": "需要 Python 3.11+ 与 uv。首次 git clone 与 uv sync 需要联网；装好后 demo、parse 与 render 全程离线，不需要 API key，只有对真实模型运行 draft 时才会调用接口。",
+      "en": "Python 3.11+ and uv. The first git clone and uv sync need network; after installation, demo, parse and render run fully offline without an API key. Only draft against a live model calls an endpoint."
+    },
+    "steps": [
+      {
+        "title": {
+          "zh": "克隆并安装",
+          "en": "Clone and install"
+        },
+        "code": "git clone https://github.com/SuperMarioYL/clauseanchor.git\ncd clauseanchor\nuv sync"
+      },
+      {
+        "title": {
+          "zh": "先离线跑一遍",
+          "en": "Run the offline demo first"
+        },
+        "code": "uv run clauseanchor demo"
+      },
+      {
+        "title": {
+          "zh": "对真实公报起草",
+          "en": "Draft from a real gazette"
+        },
+        "code": "export DEEPSEEK_API_KEY=sk-...\nuv run clauseanchor draft 公报.pdf --model deepseek"
+      },
+      {
+        "title": {
+          "zh": "导出三种成品",
+          "en": "Export the pack"
+        },
+        "code": "uv run clauseanchor render decisions.json -o out"
+      }
+    ]
+  },
+  "limitations": [
+    {
+      "zh": "只接有文字层的 PDF 与纯文本：扫描件、图片型红头文件与 OCR 不在 v0.1 范围内。",
+      "en": "Text-layer PDFs and plain text only: scanned gazettes, image-only notices and OCR are out of scope for v0.1."
+    },
+    {
+      "zh": "图卡输出是可直接截图的 HTML，不是自动排好的 PNG；也不会自动发布到公众号或视频号后台。",
+      "en": "Cards are exported as HTML for you to screenshot, not as a laid-out PNG; nothing is auto-posted to WeChat or 视频号."
+    },
+    {
+      "zh": "闸门绑定在你提供的本地源文件上：它核对引文与源文件，不验证该文件是否与官方发布一致；本地编辑者可以先改源文件再重新起草。",
+      "en": "The gate binds to the local source you supply. It checks the quote against that file; it does not verify that the file matches the official publication, and a local editor can change the source before a new run."
+    },
+    {
+      "zh": "模型仍负责写正文：工具校验引文与条款号，不评价论证质量或完整性，也不做条款效力判断、不输出法律意见。",
+      "en": "The model still writes the prose. The tool checks quotes and clause numbers; it does not judge argument quality or completeness, decide legal effect, or provide legal advice."
+    },
+    {
+      "zh": "已实测 3 份上海市政策 PDF（16 / 41 / 37 条）。附件、修订版 / 试行版、跨页表格与新的机关版式仍可能切错，起草前先看 parse 输出。",
+      "en": "Tested on three Shanghai policy PDFs (16 / 41 / 37 articles). Attachments, amended or trial versions, cross-page tables and unfamiliar agency layouts can still split incorrectly; read the parse output before drafting."
+    }
+  ],
+  "scene": {
+    "kind": "neon-graph",
+    "fallback": "/assets/scene-dark.svg",
+    "fallbackLight": "/assets/scene-light.svg",
+    "caption": {
+      "zh": "条款树与引文锚点（示意图）",
+      "en": "Clause tree with quote anchors (illustrative)"
+    }
+  },
+  "story": {
+    "intro": {
+      "title": {
+        "zh": "模型写得越顺，条款号和日期越难发现错。",
+        "en": "The smoother the prose, the harder the clause and date errors are to see."
+      },
+      "body": {
+        "zh": "政策解读的失败集中在低熵标识：条款号、生效日期、适用范围。通用模型会把 第X条 当成普通文本顺下去，补一个看起来合理的日期，或把邻条的原文混进引文。而“请给出处”通常只回到文档级，作者仍要自己翻到第几条。时间花在核对，不是写。",
+        "en": "Policy commentary fails on low-entropy identifiers: clause numbers, effective dates, scope. A general model treats 第X条 as ordinary text to smooth over, fills in a plausible date, or blends a neighbouring clause into the quote. \"Please cite your sources\" only gets you to the document; someone still has to find 第几条 by hand. The time goes into reconciliation, not writing."
+      }
+    },
+    "sections": [
+      {
+        "title": {
+          "zh": "工作原理",
+          "en": "How it works"
+        },
+        "body": {
+          "zh": "解析保留 第X条 / 第X款、页码与字符位置；模型基于条款树起草候选；你在终端逐条取舍；导出只读已采纳条目。单进程 CLI，没有常驻服务、账号体系或云端存储。",
+          "en": "Parsing keeps 第X条 / 第X款, page numbers and character spans. The model drafts candidates from the clause tree; you review each claim in the terminal; export reads accepted claims only. One CLI process, with no daemon, accounts or cloud storage."
+        },
+        "image": {
+          "light": "/assets/process-light.svg",
+          "dark": "/assets/process-dark.svg",
+          "alt": {
+            "zh": "从公报解析、起草候选、逐条取舍到导出长文、口播稿与图卡的流程图",
+            "en": "Process diagram: parse the gazette, draft candidates, review each claim, render the longform, voiceover script and cards"
+          }
+        }
+      },
+      {
+        "title": {
+          "zh": "导出前的闸门",
+          "en": "The gates before export"
+        },
+        "body": {
+          "zh": "四组检查串在导出路径上：引文逐字命中；结论点名的条款号已校验；每条条款快照的正文摘要与源文件一致；源文件 doc_id 一致。任何一组对不上，整包拒绝导出并指出是哪一条。引文只和声明条款比对，成品里的条款号、页码与生效日期也只取锚点真正命中的那一条。",
+          "en": "Four checks sit on the export path: the quote matches its clause verbatim; every clause number named in the conclusion is verified; each clause snapshot's digest matches the source; and the source doc_id matches. Any failure rejects the whole pack and names the clause. A quote is compared only against the clauses the claim named, and the exported label, page and effective date come only from the clause the anchor actually matched."
+        },
+        "image": {
+          "light": "/assets/gates-light.svg",
+          "dark": "/assets/gates-dark.svg",
+          "alt": {
+            "zh": "四条导出检查的示意图：逐字引文、结论条款号、条款快照摘要、源文件 doc_id，一条不合格就整包拒绝",
+            "en": "Diagram of the four export checks: verbatim quote, clause numbers in the conclusion, clause snapshot digest, source doc_id; one failure rejects the whole pack"
+          }
+        }
+      },
+      {
+        "title": {
+          "zh": "一份决定，三种成品",
+          "en": "One decision file, three outputs"
+        },
+        "body": {
+          "zh": "导出只读 decisions.json 里已采纳的条目：公众号长文保留 第X条、页码、生效日期与原文引文；口播稿把同一批条目转成可直接念的口语；图卡输出可直接截图的 HTML。剔除的结论不会出现在任何成品里。",
+          "en": "Export reads only the accepted claims in decisions.json: the WeChat longform keeps 第X条, page, effective date and the verbatim quote; the voiceover script turns the same claims into spoken prose; cards are exported as screenshot-ready HTML. A rejected claim appears in none of them."
+        },
+        "image": {
+          "light": "/assets/outputs-light.svg",
+          "dark": "/assets/outputs-dark.svg",
+          "alt": {
+            "zh": "一份 decisions.json 导出公众号长文、口播稿与图卡 HTML 三种成品",
+            "en": "One decisions.json fanning out to a WeChat longform, a voiceover script and card HTML"
+          }
+        }
+      }
+    ],
+    "details": [
+      {
+        "title": {
+          "zh": "配置接口与模型",
+          "en": "Configure the endpoint and model"
+        },
+        "body": {
+          "zh": "默认端点是 https://api.deepseek.com/v1，默认模型 deepseek-chat。--base-url 可指向任意 OpenAI 兼容端点；--model 接受短别名 deepseek、deepseek-r、qwen，也可以直接给真实模型 id。密钥依次读 CLAUSEANCHOR_API_KEY、DEEPSEEK_API_KEY、OPENAI_API_KEY。",
+          "en": "The default endpoint is https://api.deepseek.com/v1 and the default model is deepseek-chat. --base-url points at any OpenAI-compatible endpoint; --model accepts the short aliases deepseek, deepseek-r and qwen, or any real model id. The key is read from CLAUSEANCHOR_API_KEY, then DEEPSEEK_API_KEY, then OPENAI_API_KEY."
+        },
+        "code": "uv run clauseanchor draft 公报.pdf --base-url https://dashscope.aliyuncs.com/compatible-mode/v1 --model qwen-plus"
+      },
+      {
+        "title": {
+          "zh": "逐条取舍与重放",
+          "en": "Per-claim review and replay"
+        },
+        "body": {
+          "zh": "a 采纳这条结论，e 改写结论并粘贴原文中的真实片段修复引文，r 剔除。已有 decisions.json 时可以不调用模型重放：重新解析源文件、核对每条快照摘要并重跑引文校验。",
+          "en": "a accepts the claim, e rewrites the conclusion and has you paste the true passage from the clause to repair the quote, r rejects it. With an existing decisions.json, replay re-parses the source, checks every snapshot digest and re-runs the quote gate without calling a model."
+        },
+        "code": "uv run clauseanchor draft --decisions decisions.json -o decisions.replayed.json"
+      },
+      {
+        "title": {
+          "zh": "已实测范围",
+          "en": "Tested scope"
+        },
+        "body": {
+          "zh": "实测 3 份上海市政府公开 PDF：2 份市属部门联合发文、1 份市级人民政府发文，共 16 / 41 / 37 条，页码与原文逐条对应。这不是对所有机关版式的承诺：附件、修订版 / 试行版与跨页表格仍可能切错。",
+          "en": "Checked against three public Shanghai policy PDFs: two joint departmental notices and one municipal-government notice, 16 / 41 / 37 articles, with page mapping checked clause by clause. This is not a promise for every agency layout: attachments, amended or trial versions and cross-page tables can still split incorrectly."
+        },
+        "code": "uv run clauseanchor parse examples/real/sh_gov_investment_management.pdf"
+      },
+      {
+        "title": {
+          "zh": "范围与限制",
+          "en": "Scope and limits"
+        },
+        "body": {
+          "zh": "v0.1 只接有文字层的 PDF 与纯文本，不做扫描件 OCR；图卡只输出 HTML，由你截图或排版；闸门绑在你提供的本地源文件上，不验证文件是否与官方发布一致；文风仍由模型写，工具只保证引文与条款号可回指。",
+          "en": "v0.1 accepts text-layer PDFs and plain text only; there is no OCR for scans. Cards are HTML for you to screenshot or lay out. The gate binds to the local source you supply and does not verify it against the official publication. The model still writes the prose; the tool only makes the quote and clause number traceable."
+        }
+      }
+    ]
+  },
+  "cta": {
+    "headline": {
+      "zh": "把下一条结论\n钉回原文。",
+      "en": "Pin the next claim\nback to its clause."
+    },
+    "sub": {
+      "zh": "MIT 开源的本地 CLI，不按 token 计费；无账号、无云端存储、无遥测。",
+      "en": "An MIT-licensed local CLI, not billed per token; no accounts, no cloud storage, no telemetry."
+    },
+    "button": {
+      "zh": "在 GitHub 上查看",
+      "en": "View on GitHub"
+    }
+  },
+  "footer": {
+    "tag": {
+      "zh": "MIT 开源 · 本地 CLI，无账号、无云端存储、无遥测",
+      "en": "MIT open source · local CLI, no accounts, no cloud storage, no telemetry"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" data-palette="e66056-e7b56a-f6acc2-681201725634" role="img" aria-labelledby="fig-title fig-desc">
+<title id="fig-title">Real-gazette run: 2 accepted, 2 blocked</title>
+<desc id="fig-desc">Real-gazette run: 2 accepted, 2 blocked</desc>
+<rect x="0" y="0" width="760" height="300" rx="12" fill="#131017" stroke="#3a1b1d" stroke-width="1"/>
+<rect x="0" y="0" width="760" height="3" rx="1.5" fill="#e66056"/>
+<text x="24" y="48" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="11" fill="#e66056" font-weight="600" letter-spacing="2">REVIEW / 取舍</text>
+<text x="736" y="48" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="12" fill="#fdeef3" text-anchor="end">2026-08-01</text>
+<rect x="24" y="78" width="712" height="40" rx="8" fill="#140d13" stroke="#3a1b1d" stroke-width="1"/>
+<rect x="24" y="78" width="4" height="40" rx="2" fill="#e7b56a"/>
+<text x="44" y="103" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="12" fill="#b29ea8">c1</text>
+<text x="88" y="103" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Space Grotesk', system-ui, sans-serif" font-size="15" fill="#fdeef3" font-weight="600">第一条</text>
+<text x="700" y="103" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="11" fill="#e7b56a" font-weight="600" text-anchor="end">✓ accepted</text><rect x="24" y="126" width="712" height="40" rx="8" fill="#140d13" stroke="#3a1b1d" stroke-width="1"/>
+<rect x="24" y="126" width="4" height="40" rx="2" fill="#e7b56a"/>
+<text x="44" y="151" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="12" fill="#b29ea8">c2</text>
+<text x="88" y="151" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Space Grotesk', system-ui, sans-serif" font-size="15" fill="#fdeef3" font-weight="600">第十三条</text>
+<text x="700" y="151" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="11" fill="#e7b56a" font-weight="600" text-anchor="end">✓ accepted</text><rect x="24" y="174" width="712" height="40" rx="8" fill="#140d13" stroke="#3a1b1d" stroke-width="1"/>
+<rect x="24" y="174" width="4" height="40" rx="2" fill="#e66056"/>
+<text x="44" y="199" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="12" fill="#b29ea8">c3</text>
+<text x="88" y="199" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Space Grotesk', system-ui, sans-serif" font-size="15" fill="#fdeef3" font-weight="600">第二十五条</text>
+<text x="700" y="199" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="11" fill="#e66056" font-weight="600" text-anchor="end">✕ blocked</text><rect x="24" y="222" width="712" height="40" rx="8" fill="#140d13" stroke="#3a1b1d" stroke-width="1"/>
+<rect x="24" y="222" width="4" height="40" rx="2" fill="#e66056"/>
+<text x="44" y="247" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="12" fill="#b29ea8">c4</text>
+<text x="88" y="247" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Space Grotesk', system-ui, sans-serif" font-size="15" fill="#fdeef3" font-weight="600">第十三条</text>
+<text x="700" y="247" font-family="ui-monospace, 'SFMono-Regular', Menlo, 'Noto Sans Mono CJK SC', monospace" font-size="11" fill="#e66056" font-weight="600" text-anchor="end">✕ blocked</text>
+<text x="24" y="282" font-family="-apple-system, 'PingFang SC', 'Noto Sans CJK SC', 'Microsoft YaHei', 'Space Grotesk', system-ui, sans-serif" font-size="10.5" fill="#b29ea8">c3 引文被插入其他文字 · c4 把第二十五条的原文挂到第十三条</text>
+</svg>
